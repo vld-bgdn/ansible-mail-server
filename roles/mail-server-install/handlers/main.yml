@@ -1,2 +1,18 @@
 ---
-# handlers file for mail-server-install
+- name: Reload firewall
+  service:
+    name : firewalld
+    state: reloaded
+
+- name: Enable postfix
+  service: name=postfix enabled=yes
+
+- name: Enable dovecot
+  service: name=dovecot enabled=yes
+
+- name: Enable httpd
+  service: name=httpd enabled=yes
+
+
+- name: Restart httpd
+  service: name=httpd state=restarted

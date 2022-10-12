@@ -1,9 +1,11 @@
 ---
 # vars file for mail-server-install
 domain: lab.bgdn.io
-mail-hostname: mail.lab.bgdn.io
-ldap-server: 192.168.88.201
-ldap-dn-user: _mail_svc
-ldap-dn-pass: Amgdant777
-ldap-search-base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
+mail_hostname: mail.lab.bgdn.io
+ldap_server: 192.168.88.201
+ldap_dn_user: _mail_svc
+ldap_dn_pass: Amgdant777
+ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
+vmail_path: /mnt/vmail
 php_version: 7.4
+local_net: 192.168.88.0/24

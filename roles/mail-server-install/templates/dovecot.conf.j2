@@ -27,7 +27,7 @@ ssl_prefer_server_ciphers = yes
 
 disable_plaintext_auth = no
 
-mail_location = maildir:/mnt/vmail/%d/%u/
+mail_location = maildir:{{ vmail_path }}/%d/%u/
 
 auth_default_realm = {{ domain }}
 auth_mechanisms = PLAIN LOGIN
@@ -84,7 +84,7 @@ plugin {
  auth_socket_path = /var/run/dovecot/auth-master
 
  acl = vfile
- acl_shared_dict = file:/mnt/vmail/shared-folders/shared-mailboxes.db
+ acl_shared_dict = file:{{ vmail_path }}/shared-folders/shared-mailboxes.db
  sieve_dir = ~/.sieve/
  mailbox_alias_old = Sent
  mailbox_alias_new = Sent Messages

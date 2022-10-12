@@ -5,7 +5,7 @@ daemon_directory = /usr/libexec/postfix
 data_directory = /var/lib/postfix
 mail_owner = postfix
 
-myhostname = {{ mail-hostname }}
+myhostname = {{ mail_hostname }}
 mydomain = {{ domain }}
 myorigin = $myhostname
 
@@ -15,7 +15,7 @@ inet_protocols = ipv4
 mydestination = localhost.$mydomain, localhost
 unknown_local_recipient_reject_code = 550
 
-mynetworks = 192.168.88.0/24, 127.0.0.0/8
+mynetworks = {{ local_net }}, 127.0.0.0/8
 
 #alias_maps = hash:/etc/aliases, ldap:/etc/postfix/ldap_aliases.cf
 alias_maps = hash:/etc/aliases
@@ -44,7 +44,6 @@ meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
 
 relay_domains = $mydestination
-#relay_domains = mysql:/etc/postfix/mysql/relay_domains.cf
 
 smtpd_discard_ehlo_keywords = etrn, silent-discard
 smtpd_forbidden_commands = CONNECT GET POST
@@ -116,7 +115,7 @@ smtpd_sasl_type = dovecot
 smtpd_sasl_path = private/dovecot-auth
 
 virtual_transport = dovecot
-virtual_mailbox_base = /mnt/vmail
+virtual_mailbox_base = {{ vmail_path }}
 virtual_minimum_uid = 1010
 virtual_uid_maps = static:1010
 virtual_gid_maps = static:1010

@@ -1,9 +1,9 @@
-hosts = {{ ldap-server }}
+hosts = {{ ldap_server }}
 ldap_version = 3
 auth_bind = yes
-dn = uid={{ ldap-dn-user }},{{ ldap-search-base }}
+dn = uid={{ ldap_dn_user }},{{ ldap_search_base }}
 dnpass = secret
-base = {{ ldap-search-base }}
+base = {{ ldap_search_base }}
 scope = subtree
 deref = never
 user_filter = (&(objectClass=inetOrgPerson)(|(uid=%n)(mail=%u)))
