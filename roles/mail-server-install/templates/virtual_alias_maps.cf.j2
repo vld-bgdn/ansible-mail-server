@@ -1,0 +1,9 @@
+version = 3
+server_host = ldap://{{ ldap-server }}
+search_base = {{ ldap-search-base }}
+query_filter = (&(objectClass=inetorgperson)(mail=%s))
+result_attribute = mail
+scope = sub
+bind = yes
+bind_dn = uid={{ ldap-dn-user }},cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
+bind_pw = {{ ldap-dn-pass }}
