@@ -1,0 +1,42 @@
+---
+- name: install remi repo
+  yum: 
+    name: "{{ packages }}"
+    state: present
+  vars: 
+    packages:
+      - dnf-utils 
+      - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
+  when: 
+    - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
+
+#- name: enable remi-php repo 
+#  shell:
+#    cmd: dnf module enable -y php:remi-{{ php_version }}      
+
+- name: enable php module from remi repo
+  copy:
+    dest: /etc/dnf/modules.d/php.module
+    content: |
+      [php]
+      name=php
+      stream=remi-{{ php_version }}
+      profiles=
+      state=enabled
+  when: 
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version | int >= 8
+
+#- name: disable remi-safe repo
+#  shell:
+#    cmd: dnf config-manager --disable remi-safe
+
+- name: disable remi-safe repo
+  ini_file:
+    path: /etc/yum.repos.d/remi-safe.repo
+    section: remi-safe
+    option: state
+    value: disabled
+    no_extra_spaces: yes
+  when: 
+    - ansible_os_family == 'RedHat'

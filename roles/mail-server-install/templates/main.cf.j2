@@ -1,0 +1,139 @@
+compatibility_level = 2
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+
+myhostname = {{ mail-hostname }}
+mydomain = {{ domain }}
+myorigin = $myhostname
+
+inet_interfaces = all
+inet_protocols = ipv4
+
+mydestination = localhost.$mydomain, localhost
+unknown_local_recipient_reject_code = 550
+
+mynetworks = 192.168.88.0/24, 127.0.0.0/8
+
+#alias_maps = hash:/etc/aliases, ldap:/etc/postfix/ldap_aliases.cf
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+
+smtpd_banner = $myhostname ESMTP $mail_name
+debug_peer_level = 2
+
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
+
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix/samples
+readme_directory = /usr/share/doc/postfix/README_FILES
+
+smtp_tls_CApath = /etc/pki/tls/certs
+smtp_tls_CAfile = /etc/pki/tls/certs/ca-bundle.crt
+smtp_tls_security_level = may
+meta_directory = /etc/postfix
+shlib_directory = /usr/lib64/postfix
+
+relay_domains = $mydestination
+#relay_domains = mysql:/etc/postfix/mysql/relay_domains.cf
+
+smtpd_discard_ehlo_keywords = etrn, silent-discard
+smtpd_forbidden_commands = CONNECT GET POST
+broken_sasl_auth_clients = yes
+smtpd_delay_reject = yes
+smtpd_helo_required = yes
+smtp_always_send_ehlo = yes
+disable_vrfy_command = yes
+
+smtpd_helo_restrictions = permit_mynetworks,
+ permit_sasl_authenticated,
+ reject_non_fqdn_helo_hostname,
+ reject_invalid_helo_hostname
+
+smtpd_data_restrictions = permit_mynetworks,
+ permit_sasl_authenticated,
+ reject_unauth_pipelining,
+ reject_multi_recipient_bounce,
+
+smtpd_sender_restrictions = permit_mynetworks,
+ permit_sasl_authenticated,
+ reject_non_fqdn_sender,
+ reject_unknown_sender_domain
+
+smtpd_recipient_restrictions = permit_mynetworks,
+ permit_sasl_authenticated,
+ reject_non_fqdn_recipient,
+ reject_unknown_recipient_domain,
+ reject_multi_recipient_bounce,
+ reject_unauth_destination,
+
+smtp_tls_security_level = may
+smtp_tls_loglevel = 1
+smtpd_tls_security_level = may
+smtpd_tls_loglevel = 1
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_timeout = 3600s
+smtp_tls_session_cache_database = btree:$data_directory/smtp_tls_session_cache
+smtpd_tls_key_file = /etc/postfix/certs/key.pem
+smtpd_tls_cert_file = /etc/postfix/certs/fullchain.pem
+tls_random_source = dev:/dev/urandom
+smtpd_tls_mandatory_ciphers = low
+smtpd_tls_ciphers = low
+smtpd_tls_mandatory_protocols = !SSLv2,!SSLv3
+smtp_tls_mandatory_protocols  = !SSLv2,!SSLv3
+smtp_tls_ciphers = low
+smtp_tls_mandatory_ciphers = low
+smtp_tls_protocols = !SSLv2,!SSLv3
+smtp_tls_policy_maps = hash:/etc/postfix/tls_policy_maps
+smtp_tls_note_starttls_offer = yes
+
+message_size_limit = 20000000
+smtpd_soft_error_limit = 10
+smtpd_hard_error_limit = 15
+smtpd_error_sleep_time = 20
+anvil_rate_time_unit = 60s
+smtpd_client_connection_count_limit = 20
+smtpd_client_connection_rate_limit = 30
+smtpd_client_message_rate_limit = 30
+smtpd_client_event_limit_exceptions = 127.0.0.0/8
+smtpd_client_connection_limit_exceptions = 127.0.0.0/8
+
+maximal_queue_lifetime = 1d
+bounce_queue_lifetime = 1d
+
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/dovecot-auth
+
+virtual_transport = dovecot
+virtual_mailbox_base = /mnt/vmail
+virtual_minimum_uid = 1010
+virtual_uid_maps = static:1010
+virtual_gid_maps = static:1010
+
+### LDAP section
+virtual_mailbox_domains = {{ domain }}
+virtual_alias_maps = ldap:/etc/postfix/ldap/virtual_alias_maps.cf
+virtual_mailbox_maps = ldap:/etc/postfix/ldap/virtual_mailbox_maps.cf
+
+dovecot_destination_recipient_limit = 1
+
+sender_bcc_maps = hash:/etc/postfix/sender_bcc_maps
+recipient_bcc_maps = hash:/etc/postfix/recipient_bcc_maps
+
+compatibility_level=2
+
+smtpd_milters = inet:127.0.0.1:8891
+non_smtpd_milters = $smtpd_milters
+milter_default_action = accept
+milter_protocol = 2
