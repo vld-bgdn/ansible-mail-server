@@ -81,7 +81,7 @@
     path: /var/log/dovecot/
     owner: vmail
     group: dovecot
-    recurce: yes
+    recurse: yes
 
 - name: Create directory for shared folders
   file:
