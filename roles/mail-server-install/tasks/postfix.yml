@@ -32,7 +32,7 @@
 
 - name: Install postfix
   yum: 
-    name: '{{ postifx_pkg }}'
+    name: '{{ postfix_pkg }}'
     state: present
   notify: Enable postfix
 
