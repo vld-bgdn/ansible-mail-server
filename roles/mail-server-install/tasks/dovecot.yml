@@ -4,15 +4,6 @@
     state: present
   notify: Enable dovecot
 
-#- name: Enabling and starting {{ svc }} service
-#  service:
-#    name: '{{ svc }}'
-#    state: started
-#    enabled: true
-
-#- name: Rename dovecot conf.d folder
-#  command: mv /etc/dovecot/conf.d /etc/dovecot/conf.d.bak
-
 - name: Check dovecot conf.d folder
   stat:
     path: /etc/dovecot/conf.d
@@ -29,21 +20,25 @@
   file: 
     path: /etc/dovecot/conf.d
     state: absent
-  when: conf.d.stat.exists
+  when: conf_d.stat.exists
 
-#- name: Rename dovecot.conf
-#  command: mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
+- name: Check dovecot.conf file
+  stat:
+    path: /etc/dovecot/dovecot.conf
+  register: dovecot_conf
 
 - name: Renaming. Copy dovecot.conf
   copy: 
     remote_src: True
     src: /etc/dovecot/dovecot.conf
     dest: /etc/dovecot/dovecot.conf.bak
+  when: dovecot_conf.stat.exists
 
 - name: Renaming. Delete dovecot.conf
   file: 
     path: /etc/dovecot.conf
     state: absent
+  when: dovecot_conf.stat.exists
 
 - name: Generate dovecot.conf
   template: 

@@ -28,14 +28,23 @@
     state: present
   notify: Enable postfix
 
-#- name: Enabling and starting {{ svc }} service
-#  service:
-#    name: "{{ svc }}"
-#    state: started
-#    enabled: true
+- name: Check postfix main.cf file
+  stat:
+    path: /etc/postfix/main.cf
+  register: main_cf
 
-- name: Rename postfix main.cf
-  command: mv /etc/postfix/main.cf /etc/postfix/main.cf.bak
+- name: Renaming. Copy postfix main.cf file
+  copy: 
+    remote_src: True
+    src: /etc/postfix/main.cf
+    dest: /etc/postfix/main.cf.bak
+  when: main_cf.stat.exists
+
+- name: Renaming. Delete postfix main.cf file
+  file: 
+    path: /etc/postfix/main.cf
+    state: absent
+  when: main_cf.stat.exists
 
 - name: Generate postfix main.cf
   template: 
@@ -69,8 +78,23 @@
 - name: Generate postfix tls_policy_maps
   command: postmap /etc/postfix/tls_policy_maps
 
-- name: Rename postfix master.cf
-  command: mv /etc/postfix/master.cf /etc/postfix/master.cf.bak
+- name: Check postfix master.cf file
+  stat:
+    path: /etc/postfix/master.cf
+  register: master_cf
+
+- name: Renaming. Copy postfix master.cf file
+  copy: 
+    remote_src: True
+    src: /etc/postfix/master.cf
+    dest: /etc/postfix/master.cf.bak
+  when: master_cf.stat.exists
+
+- name: Renaming. Delete postfix master.cf file
+  file: 
+    path: /etc/postfix/master.cf
+    state: absent
+  when: master_cf.stat.exists
 
 - name: Copy postfix master.cf
   copy: 
