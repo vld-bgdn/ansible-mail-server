@@ -13,19 +13,11 @@
 
 - name: Open port 
   firewalld:
-#    port: '{{ fw_ports }}'
     port: '{{ item }}'
     permanent: yes
     state: enabled
   notify: Reload firewall
-  loop:
-    - 25/tcp
-    - 110/tcp
-    - 143/tcp
-    - 587/udp
-    - 465/udp
-    - 993/udp
-    - 995/udp
+  loop: '{{ fw_ports }}'
 
 - name: Disable selinux
   selinux: state=disabled
