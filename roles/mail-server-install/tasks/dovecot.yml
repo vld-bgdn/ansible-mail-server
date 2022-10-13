@@ -1,13 +1,8 @@
 - name: Install dovecot
   yum: 
-    name: "{{ pkg }}"
+    name: "{{ dovecot_pkg }}"
     state: present
-  vars: 
-    pkg:
-      - dovecot
-      - dovecot-pigeonhole
-      - dovecot-ldap
-    notify: Enable dovecot
+  notify: Enable dovecot
 
 #- name: Enabling and starting {{ svc }} service
 #  service:
@@ -22,22 +17,42 @@
   command: mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
 
 - name: Generate dovecot.conf
-  template: src=templates/dovecot.conf.j2 dest=/etc/dovecot/dovecot.conf mode=0555
+  template: 
+    src: templates/dovecot.conf.j2
+    dest: /etc/dovecot/dovecot.conf
+    mode: 0555
 
 - name: Create group for vmail user
-  group: name=vmail gid=1010
+  group: 
+    name: vmail
+    gid: 1010
 
 - name: Add the vmail user with a specific uid and a primary group
-  user: name=vmail uid=1010 group=vmail home=/mnt/vmail/
+  user: 
+    name: vmail
+    uid: 1010
+    group: vmail
+    home: /mnt/vmail/
 
 - name: Change vmail folder permission
-  file: path=/mnt/vmail owner=vmail group=vmail
+  file: 
+    path: /mnt/vmail
+    owner: vmail
+    group: vmail
 
 - name: Create vmail folder
-  file: path=/mnt/vmail state=directory owner=vmail group=dovecot mode=0664
+  file: 
+    path: /mnt/vmail
+    state: directory
+    owner: vmail
+    group: dovecot
+    mode: 0664
 
 - name: Generate dovecot-ldap.conf
-  template: src=templates/dovecot-ldap.conf.j2 dest=/etc/dovecot/dovecot-ldap.conf mode=0555
+  template:
+    src: templates/dovecot-ldap.conf.j2
+    dest: /etc/dovecot/dovecot-ldap.conf
+    mode: 0555
 
 - name: Create directory for dovecot logs
   file:
@@ -62,13 +77,22 @@
     - lmtp.log
 
 - name: Change dovecot log folder permission
-  file: path=/var/log/dovecot/ owner=vmail group=dovecot recurce=yes
+  file: 
+    path: /var/log/dovecot/
+    owner: vmail
+    group: dovecot
+    recurce: yes
+
+- name: Create directory for shared folders
+  file:
+    path: "/mnt/vmail/shared-folders"
+    state: directory
+    owner: vmail
+    group: vmail
+    mode: 0664
 
 
-mkdir /mnt/mail/shared-folders
-chown -R vmail. /mnt/mail
-
-systemctl restart postfix
-systemctl start dovecot
-systemctl enable postfix
-systemctl enable dovecot
+#systemctl restart postfix
+#systemctl start dovecot
+#systemctl enable postfix
+#systemctl enable dovecot

@@ -40,6 +40,25 @@ readme_directory = /usr/share/doc/postfix/README_FILES
 smtp_tls_CApath = /etc/pki/tls/certs
 smtp_tls_CAfile = /etc/pki/tls/certs/ca-bundle.crt
 smtp_tls_security_level = may
+smtp_tls_loglevel = 1
+smtpd_tls_security_level = may
+smtpd_tls_loglevel = 1
+smtpd_tls_received_header = yes
+smtpd_tls_session_cache_timeout = 3600s
+smtp_tls_session_cache_database = btree:$data_directory/smtp_tls_session_cache
+smtpd_tls_key_file = /ssl/key.pem
+smtpd_tls_cert_file = /ssl/fullchain.pem
+tls_random_source = dev:/dev/urandom
+smtpd_tls_mandatory_ciphers = low
+smtpd_tls_ciphers = low
+smtpd_tls_mandatory_protocols = !SSLv2,!SSLv3
+smtp_tls_mandatory_protocols  = !SSLv2,!SSLv3
+smtp_tls_ciphers = low
+smtp_tls_mandatory_ciphers = low
+smtp_tls_protocols = !SSLv2,!SSLv3
+smtp_tls_policy_maps = hash:/etc/postfix/tls_policy_maps
+smtp_tls_note_starttls_offer = yes
+
 meta_directory = /etc/postfix
 shlib_directory = /usr/lib64/postfix
 
@@ -74,26 +93,6 @@ smtpd_recipient_restrictions = permit_mynetworks,
  reject_unknown_recipient_domain,
  reject_multi_recipient_bounce,
  reject_unauth_destination,
-
-smtp_tls_security_level = may
-smtp_tls_loglevel = 1
-smtpd_tls_security_level = may
-smtpd_tls_loglevel = 1
-smtpd_tls_received_header = yes
-smtpd_tls_session_cache_timeout = 3600s
-smtp_tls_session_cache_database = btree:$data_directory/smtp_tls_session_cache
-smtpd_tls_key_file = /etc/postfix/certs/key.pem
-smtpd_tls_cert_file = /etc/postfix/certs/fullchain.pem
-tls_random_source = dev:/dev/urandom
-smtpd_tls_mandatory_ciphers = low
-smtpd_tls_ciphers = low
-smtpd_tls_mandatory_protocols = !SSLv2,!SSLv3
-smtp_tls_mandatory_protocols  = !SSLv2,!SSLv3
-smtp_tls_ciphers = low
-smtp_tls_mandatory_ciphers = low
-smtp_tls_protocols = !SSLv2,!SSLv3
-smtp_tls_policy_maps = hash:/etc/postfix/tls_policy_maps
-smtp_tls_note_starttls_offer = yes
 
 message_size_limit = 20000000
 smtpd_soft_error_limit = 10

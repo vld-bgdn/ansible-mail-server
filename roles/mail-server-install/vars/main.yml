@@ -9,3 +9,27 @@ ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
 vmail_path: /mnt/vmail
 php_version: 7.4
 local_net: 192.168.88.0/24
+sys_pkg:
+  - htop 
+  - mc 
+  - mlocate 
+  - ncdu 
+  - vim 
+  - wget 
+  - curl
+  - nc
+dovecot_pkg: 
+  - dovecot
+  - dovecot-pigeonhole
+  - dovecot-ldap
+postfix_pkg:
+  - postfix
+  - postfix-ldap
+fw_ports:
+  - 25/tcp
+  - 110/tcp
+  - 143/tcp
+  - 587/udp
+  - 465/udp
+  - 993/udp
+  - 995/udp
