@@ -1,9 +1,9 @@
 galaxy_info:
-  author: Vladimir Bogdanov
-  description: Role for installing mail server with ldap backend: postfix, dovecot, roundcube, opendkim
-  company:
-  license: license (GPL-2.0-or-later, MIT, etc)
-  min_ansible_version: 2.9
+  author: 'Vladimir Bogdanov'
+  description: 'Role for installing mail server with ldap backend: postfix, dovecot, roundcube, opendkim'
+#  company: 
+  license: 'license (GPL-2.0-or-later, MIT, etc)'
+  min_ansible_version: '2.9'
   galaxy_tags: []
 
 dependencies: []
