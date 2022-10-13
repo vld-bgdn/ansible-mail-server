@@ -5,14 +5,31 @@
     state: reloaded
 
 - name: Enable postfix
-  service: name=postfix enabled=yes
+  service: 
+    name: postfix
+    state: restarted
+
+- name: Restart postfix
+  service:
+    name: postfix
+    enabled: yes
 
 - name: Enable dovecot
-  service: name=dovecot enabled=yes
+  service: 
+    name: dovecot
+    enabled: yes
+
+- name: Restart dovecot
+  service: 
+    name: dovecot
+    state: restarted
 
 - name: Enable httpd
-  service: name=httpd enabled=yes
-
+  service:
+    name: httpd
+    enabled: yes
 
 - name: Restart httpd
-  service: name=httpd state=restarted
+  service: 
+    name: httpd
+    state: restarted

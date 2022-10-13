@@ -90,9 +90,6 @@
     owner: vmail
     group: vmail
     mode: 0664
-
-
-#systemctl restart postfix
-#systemctl start dovecot
-#systemctl enable postfix
-#systemctl enable dovecot
+  notify:
+    - Restart postfix
+    - Restart dovecot
