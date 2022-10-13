@@ -30,8 +30,8 @@
 - name: Renaming. Copy dovecot.conf
   copy: 
     remote_src: True
-    src: /etc/dovecot.conf
-    dest: /etc/ddovecot.conf.bak
+    src: /etc/dovecot/dovecot.conf
+    dest: /etc/dovecot/dovecot.conf.bak
 
 - name: Renaming. Delete dovecot.conf
   file: 
