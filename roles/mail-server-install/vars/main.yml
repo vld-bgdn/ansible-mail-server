@@ -21,7 +21,6 @@ sys_pkg:
 dovecot_pkg: 
   - dovecot
   - dovecot-pigeonhole
-  - dovecot-ldap
 postfix_pkg:
   - postfix
   - postfix-ldap
