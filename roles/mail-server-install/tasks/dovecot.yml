@@ -10,11 +10,33 @@
 #    state: started
 #    enabled: true
 
-- name: Rename dovecot conf.d folder
-  command: mv /etc/dovecot/conf.d /etc/dovecot/conf.d.bak
+#- name: Rename dovecot conf.d folder
+#  command: mv /etc/dovecot/conf.d /etc/dovecot/conf.d.bak
 
-- name: Rename dovecot.conf
-  command: mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
+- name: Renaming. Copy dovecot conf.d folder
+  copy: 
+    remote_src: True
+    src: /etc/dovecot/conf.d
+    dest: /etc/dovecot/conf.d.bak
+
+- name: Renaming. Delete dovecot conf.d folder
+  file: 
+    path: /etc/dovecot/conf.d
+    state: absent
+
+#- name: Rename dovecot.conf
+#  command: mv /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.bak
+
+- name: Renaming. Copy dovecot.conf
+  copy: 
+    remote_src: True
+    src: /etc/dovecot.conf
+    dest: /etc/ddovecot.conf.bak
+
+- name: Renaming. Delete dovecot.conf
+  file: 
+    path: /etc/dovecot.conf
+    state: absent
 
 - name: Generate dovecot.conf
   template: 
