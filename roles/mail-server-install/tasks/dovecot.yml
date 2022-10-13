@@ -1,12 +1,12 @@
 - name: Install dovecot
   yum: 
-    name: "{{ dovecot_pkg }}"
+    name: '{{ dovecot_pkg }}'
     state: present
   notify: Enable dovecot
 
 #- name: Enabling and starting {{ svc }} service
 #  service:
-#    name: "{{ svc }}"
+#    name: '{{ svc }}'
 #    state: started
 #    enabled: true
 
@@ -56,7 +56,7 @@
 
 - name: Create directory for dovecot logs
   file:
-    path: "/var/log/dovecot"
+    path: /var/log/dovecot
     state: directory
     owner: vmail
     group: dovecot
@@ -64,7 +64,7 @@
 
 - name: Creating an empty file
   file:
-    path: "/var/log/dovecot/{{ item }}"
+    path: /var/log/dovecot/{{ item }}
     state: touch
     owner: vmail
     group: dovecot
@@ -85,7 +85,7 @@
 
 - name: Create directory for shared folders
   file:
-    path: "/mnt/vmail/shared-folders"
+    path: /mnt/vmail/shared-folders
     state: directory
     owner: vmail
     group: vmail

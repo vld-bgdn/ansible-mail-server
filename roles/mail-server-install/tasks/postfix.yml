@@ -8,12 +8,12 @@
 
 - name: Install sys-utils
   yum: 
-    name: {{ sys_pkg }}
+    name: '{{ sys_pkg }}'
     state: present
 
 - name: Open port 
   firewalld:
-    port: {{ fw_ports }}
+    port: '{{ fw_ports }}'
     permanent: yes
     state: enabled
   notify: Reload firewall
@@ -23,7 +23,7 @@
 
 - name: Install postfix
   yum: 
-    name: {{ postifx_pkg }}
+    name: '{{ postifx_pkg }}'
     state: present
   notify: Enable postfix
 
@@ -52,8 +52,8 @@
 
 - name: Generate postfix virtual map configs for ldap
   template: 
-    src: {{ item.src }}
-    dest: {{ item.dest }}
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     mode: 0555
   loop:
     - { src: 'templates/virtual_alias_maps.cf.j2', dest: '/etc/postfix/ldap/virtual_alias_maps.cf' }
@@ -79,8 +79,8 @@
 
 - name: Generate postfix sender and recipient bcc maps
   template: 
-    src: {{ item.src }}
-    dest: {{ item.dest }}
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
     mode: 0555
   loop:
     - { src: 'templates/recipient_bcc_maps.j2', dest: '/etc/postfix/recipient_bcc_maps' }
