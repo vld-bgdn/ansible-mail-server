@@ -16,14 +16,14 @@
 - name: Check dovecot conf.d folder
   stat:
     path: /etc/dovecot/conf.d
-  register: conf.d
+  register: conf_d
 
 - name: Renaming. Copy dovecot conf.d folder
   copy: 
     remote_src: True
     src: /etc/dovecot/conf.d
     dest: /etc/dovecot/conf.d.bak
-  when: conf.d.stat.exists
+  when: conf_d.stat.exists
 
 - name: Renaming. Delete dovecot conf.d folder
   file: 
