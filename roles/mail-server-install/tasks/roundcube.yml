@@ -2,12 +2,13 @@
 - name: Add remi repo keys
   rpm_key:
     state: present
-    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2022
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2021
 
 - name: Install remi repo
   yum: 
     name: "{{ packages }}"
     state: present
+#    disable_gpg_check: yes
   vars: 
     packages:
       - dnf-utils 
