@@ -2,7 +2,7 @@ hosts = {{ ldap_server }}
 ldap_version = 3
 auth_bind = yes
 dn = uid={{ ldap_dn_user }},{{ ldap_search_base }}
-dnpass = secret
+dnpass = {{ ldap_dn_pass }}
 base = {{ ldap_search_base }}
 scope = subtree
 deref = never
