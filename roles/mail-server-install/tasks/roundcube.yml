@@ -7,8 +7,6 @@
     packages:
       - dnf-utils 
       - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
-  when: 
-    - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
 
 #- name: enable remi-php repo 
 #  shell:
@@ -23,9 +21,6 @@
       stream=remi-{{ php_version }}
       profiles=
       state=enabled
-  when: 
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version | int >= 8
 
 #- name: disable remi-safe repo
 #  shell:
@@ -38,8 +33,6 @@
     option: state
     value: disabled
     no_extra_spaces: yes
-  when: 
-    - ansible_os_family == 'RedHat'
 
 - name: install env for roundcube
   yum: 
@@ -51,8 +44,6 @@
       - php
       - php-imap
       - php-mbstring
-  when: 
-    - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
 
 #systemctl enable --now httpd
 
