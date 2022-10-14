@@ -28,7 +28,7 @@
     state: present
   notify: Enable postfix
 
-- name: Create directory for ssl
+- name: Create directory for keystore
   file:
     path: /ssl
     state: directory
@@ -36,7 +36,7 @@
     group: root
     mode: 0644
 
-- name: Upload server cert
+- name: Add server certs and keys
   copy:
     src: files/{{ item }}
     dest: /ssl/
