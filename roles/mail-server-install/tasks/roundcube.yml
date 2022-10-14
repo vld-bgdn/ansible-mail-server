@@ -1,4 +1,9 @@
 ---
+- name: Add remi repo keys
+  rpm_key:
+    state: present
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2022
+
 - name: Install remi repo
   yum: 
     name: "{{ packages }}"
