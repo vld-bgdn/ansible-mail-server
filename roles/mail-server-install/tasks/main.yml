@@ -1,6 +1,6 @@
 ---
-- include_tasks: "postfix.yml"
-- include_tasks: "dovecot.yml"
+#- include_tasks: "postfix.yml"
+#- include_tasks: "dovecot.yml"
 - include_tasks: "roundcube.yml"
 #- include_tasks: "opendkim.yml"
 #  when: server_type=='external'
