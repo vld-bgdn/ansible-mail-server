@@ -6,13 +6,13 @@
 
 - name: Install remi repo
   yum: 
-    name: "{{ packages }}"
+    name: http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
     state: present
 #   disable_gpg_check: yes
-  vars: 
-    packages:
-      - dnf-utils 
-      - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
+#  vars: 
+#    packages:
+#      - dnf-utils 
+#      - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
 
 - name: Enable php module from remi repo
   copy:
@@ -34,32 +34,35 @@
 
 - name: Install env for roundcube
   yum: 
-    name: '{{ packages }}'
+    name: '{{ roundcube_pkg }}'
     enablerepo: remi
     state: present
-  vars: 
-    packages:
-      - httpd
-      - tar
-      - php
-      - php-imap
-      - php-mbstring
-      - php-pear
-      - php-mcrypt
-      - php-intl
-      - php-ldap
-      - php-pear-Net-SMTP
-      - php-pear-Net-Sieve
-      - php-pear-Mail-Mime
-      - php-pear-Net-IDNA2
   notify: Enable httpd
 
-- name: Correct php timezone
+- name: Correct php settings
   replace:
     path: /etc/php.ini
-    regexp: ';date.timezone ='
-    replace: 'date.timezone = {{ region }}'
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
     backup: yes
+  loop:
+    - regexp: ';date.timezone ='
+      replace: 'date.timezone = {{ region }}'
+    - regexp: 'upload_max_filesize ='
+      replace: 'upload_max_filesize = 30M'
+    - regexp: 'post_max_size ='
+      replace: 'post_max_size = 30M'
+
+#- name: Correct php settings
+#  lineinfile:
+#    path: /etc/httpd/conf/httpd.conf
+#    regexp: '{{item.from}}'
+#    line: '{{item.to}}'
+#        backup: yes
+#   with_items:
+#         - { from: ';date.timezone =', to: 'date.timezone = {{ region }}'}
+#         - { from: 'upload_max_filesize', to: 'ServerAdmin aksarav@devopsjunction.com'}
+#         - { from: 'post_max_size', to: 'LogLevel debug'}
 
 - name: Download roundcube
   get_url:
@@ -88,10 +91,45 @@
     dest: /var/www/html/
  #   directory_mode: yes
 
+- name: Create roundcube DB folder
+  file: 
+    path: '{{ roundcube_db_path }}'
+    state: directory
+    owner: apache
+    group: apache
+    mode: 0664
+
+- name: Initialize DB
+  command:
+    cmd: >
+      sqlite3 -init {{ roundcube_html_path }}/SQL/sqlite.initial.sql
+      {{ roundcube_db_path }}/sqlite.db
+    creates: {{ roundcube_db_path }}/sqlite.db
+
+- name: Generate DES-key
+  command: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1
+  register: des_key
+
 #- name: Sync roundcube folder to the apache document folder
 #  synchronize:
 #    src: /root/{{ roundcube }}
 #    dest: /var/www/html/
+
+- name: Generate roundcube config
+  template: 
+    src: templates/config.inc.php.j2
+    dest: /var/www/html/config/config.inc.php
+    owner: apache
+    group: apache
+    mode: 0555
+
+- name: Copy roundcube siev plugin config
+  copy: 
+    src: files/config.inc.php
+    dest: /var/www/html/plugins/managesieve/
+    owner: apache
+    group: apache
+    mode: 0555
 
 - name: Change roundcube folder permission
   file: 
@@ -100,17 +138,15 @@
     group: apache
     recurse: yes
 
-#roundcubemail-1.5.3
-#tar xzvf roundcubemail-1.5.3-complete.tar.gz
-#mkdir /var/www/html/roundcubemail
-#cp -R /root/roundcubemail-1.5.3/* /var/www/html/roundcubemail
-#chown -R apache. /var/www/html/roundcubemail
+- name: Delete installer roundcube folder 
+  file: 
+    path: /var/www/html/webmail/installer
+    state: absent
 
-#    dnf install httpd php mariadb mariadb-server php-imap php-mysqlnd php-mbstring
-
-#   dnf --enablerepo=remi install php-pear php-mcrypt php-intl php-ldap php-pear-Net-SMTP php-pear-Net-Sieve php-pear-Mail-Mime php-pear-Net-IDNA2
-
-
-
-
-#systemctl restart httpd php-fpm
+- name: Correct roundcube default domain
+  replace:
+    path: /var/www/html/config/defaults.inc.php
+    regexp: '$config['username_domain'] ='
+    replace: '$config['username_domain'] = '{{ domain }}';'
+    backup: yes
+  notidy: Restart httpd

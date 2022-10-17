@@ -14,6 +14,7 @@ ldap_dn_pass: !vault |
 ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
 vmail_path: /mnt/vmail
 php_version: 7.4
+cert_folder: /ssl
 local_net: 192.168.88.0/24
 sys_pkg:
   - htop 
@@ -24,12 +25,27 @@ sys_pkg:
   - wget 
   - curl
   - nc
+  - tar
 dovecot_pkg: 
   - dovecot
   - dovecot-pigeonhole
 postfix_pkg:
   - postfix
   - postfix-ldap
+roundcube_pkg:
+  - httpd
+  - sqlite
+  - php
+  - php-imap
+  - php-mbstring
+  - php-pear
+  - php-mcrypt
+  - php-intl
+  - php-ldap
+  - php-pear-Net-SMTP
+  - php-pear-Net-Sieve
+  - php-pear-Mail-Mime
+  - php-pear-Net-IDNA2
 fw_ports:
   - 25/tcp
   - 110/tcp
@@ -42,7 +58,7 @@ fw_ports:
 roundcube_version: 1.5.3
 roundcube: roundcubemail-{{ roundcube_version }}
 roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
-roundcube_db: roundcubecdb
+roundcube_db_path: /var/lib/roundcubemail
 roundcube_db_user: roundcube
-roundcube_db_pass: roundcubepass
+roundcube_html_path: /var/www/html/{{ roundcube }}
 region: Europe/Moscow

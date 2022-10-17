@@ -66,7 +66,7 @@
 
 - name: Create vmail folder
   file: 
-    path: /mnt/vmail
+    path: /mnt/vmail/{{ domain }}
     state: directory
     owner: vmail
     group: dovecot
