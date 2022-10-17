@@ -39,7 +39,9 @@ fw_ports:
   - 993/udp
   - 995/udp
 # Roundcube task
-roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/1.5.3/roundcubemail-1.5.3-complete.tar.gz
+roundcube_version: 1.5.3
+roundcube: roundcube_{{ roundcube_version }}
+roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
 roundcube_db: roundcubecdb
 roundcube_db_user: roundcube
 roundcube_db_pass: roundcubepass

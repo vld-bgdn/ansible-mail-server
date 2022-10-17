@@ -67,20 +67,34 @@
     dest: /root/roundcubemail.tar.gz
     mode: '0640'
 
-- name: Create roundcube folder
-  file: 
-    path: /var/www/html/roundcube
-    state: directory
-    owner: apache
-    group: apache
-    mode: 0664
+#- name: Create roundcube folder
+#  file: 
+#    path: /var/www/html/roundcube
+#    state: directory
+#    owner: apache
+#    group: apache
+#    mode: 0664
 
 - name: Extract roundcube
   unarchive:
     src: /root/roundcubemail.tar.gz
-    dest: /var/www/html/roundcube
+    dest: /root/
     remote_src: yes
 
+- name: Copy roundcube folder to the document folder
+  copy: 
+    remote_src: True
+    src: /root/{{ roundcube }}
+    dest: /var/www/html/
+
+- name: Change roundcube folder permission
+  file: 
+    path: /var/www/html/
+    owner: apache
+    group: apache
+    recurse: yes
+
+#roundcubemail-1.5.3
 #tar xzvf roundcubemail-1.5.3-complete.tar.gz
 #mkdir /var/www/html/roundcubemail
 #cp -R /root/roundcubemail-1.5.3/* /var/www/html/roundcubemail
