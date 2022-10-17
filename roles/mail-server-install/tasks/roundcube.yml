@@ -101,9 +101,7 @@
 
 - name: Initialize DB
   command:
-    cmd: >
-      sqlite3 -init {{ roundcube_html_path }}/SQL/sqlite.initial.sql
-      {{ roundcube_db_path }}/sqlite.db
+    cmd: sqlite3 -init {{ roundcube_html_path }}/SQL/sqlite.initial.sql {{ roundcube_db_path }}/sqlite.db
     creates: '{{ roundcube_db_path }}/sqlite.db'
 
 - name: Generate DES-key
