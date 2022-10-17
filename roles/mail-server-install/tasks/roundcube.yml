@@ -1,5 +1,5 @@
 ---
-- name: Add remi repo keys
+- name: Add remi repo key
   rpm_key:
     state: present
     key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2021
@@ -8,15 +8,11 @@
   yum: 
     name: "{{ packages }}"
     state: present
-#    disable_gpg_check: yes
+#   disable_gpg_check: yes
   vars: 
     packages:
       - dnf-utils 
       - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
-
-#- name: enable remi-php repo 
-#  shell:
-#    cmd: dnf module enable -y php:remi-{{ php_version }}      
 
 - name: Enable php module from remi repo
   copy:
@@ -27,10 +23,6 @@
       stream=remi-{{ php_version }}
       profiles=
       state=enabled
-
-#- name: disable remi-safe repo
-#  shell:
-#    cmd: dnf config-manager --disable remi-safe
 
 - name: Disable remi-safe repo
   ini_file:
@@ -50,11 +42,34 @@
       - php
       - php-imap
       - php-mbstring
+      - php-pear
+      - php-mcrypt
+      - php-intl
+      - php-ldap
+      - php-pear-Net-SMTP
+      - php-pear-Net-Sieve
+      - php-pear-Mail-Mime
+      - php-pear-Net-IDNA2
+  notify: Enable httpd
 
-#systemctl enable --now httpd
+- name: Correct php timezone
+  replace:
+    path: /etc/php/7.4/apache2/php.ini
+    regexp: ';date.timezone ='
+    replace: 'date.timezone = {{ region }}'
+    backup: yes
 
-#wget https://github.com/roundcube/roundcubemail/releases/download/1.5.3/roundcubemail-1.5.3-complete.tar.gz
+- name: Download roundcube
+  get_url:
+    url: '{{ roundcube_src }}'
+    dest: /root/roundcubemail.tar.gz
+    mode: '0640'
 
+- name: Extract roundcube
+  unarchive:
+    src: /root/roundcubemail.tar.gz
+    dest: /var/www/html/roundcube
+    remote_src: yes
 
 #tar xzvf roundcubemail-1.5.3-complete.tar.gz
 #mkdir /var/www/html/roundcubemail
@@ -66,8 +81,6 @@
 #   dnf --enablerepo=remi install php-pear php-mcrypt php-intl php-ldap php-pear-Net-SMTP php-pear-Net-Sieve php-pear-Mail-Mime php-pear-Net-IDNA2
 
 
-#/etc/php.ini
-#date.timezone = Europe/Moscow
 
 
 #systemctl restart httpd php-fpm
