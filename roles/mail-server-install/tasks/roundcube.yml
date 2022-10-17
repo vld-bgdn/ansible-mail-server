@@ -42,8 +42,8 @@
 - name: Correct php settings
   replace:
     path: /etc/php.ini
-    regexp: "{{ item.regexp }}"
-    replace: "{{ item.replace }}"
+    regexp: '{{ item.regexp }}'
+    replace: '{{ item.replace }}'
     backup: yes
   loop:
     - regexp: ';date.timezone ='
@@ -149,4 +149,4 @@
     regexp: '$config['username_domain'] ='
     replace: '$config['username_domain'] = '{{ domain }}';'
     backup: yes
-  notidy: Restart httpd
+  notify: Restart httpd
