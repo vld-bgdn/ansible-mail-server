@@ -105,7 +105,7 @@
     creates: '{{ roundcube_db_path }}/sqlite.db'
 
 - name: Generate DES-key
-  shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1"
+  shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1
   register: des_key
 
 #- name: Sync roundcube folder to the apache document folder
