@@ -81,9 +81,14 @@
     dest: /root/
     remote_src: yes
 
-- name: Copy roundcube folder to the document folder
-  copy: 
-    remote_src: True
+#- name: Copy roundcube folder to the document folder
+#  copy: 
+#    remote_src: True
+#    src: /root/{{ roundcube }}
+#    dest: /var/www/html/
+
+- name: Sync roundcube folder to the apache document folder
+  synchronize:
     src: /root/{{ roundcube }}
     dest: /var/www/html/
 
