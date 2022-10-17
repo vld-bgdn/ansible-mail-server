@@ -32,7 +32,7 @@
     value: disabled
     no_extra_spaces: yes
 
-- name: install env for roundcube
+- name: Install env for roundcube
   yum: 
     name: '{{ packages }}'
     enablerepo: remi
@@ -65,6 +65,14 @@
     url: '{{ roundcube_src }}'
     dest: /root/roundcubemail.tar.gz
     mode: '0640'
+
+- name: Create roundcube folder
+  file: 
+    path: /var/www/html/roundcube
+    state: directory
+    owner: apache
+    group: apache
+    mode: 0664
 
 - name: Extract roundcube
   unarchive:
