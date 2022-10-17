@@ -55,7 +55,7 @@
 
 - name: Correct php timezone
   replace:
-    path: /etc/php/7.4/apache2/php.ini
+    path: /etc/php.ini
     regexp: ';date.timezone ='
     replace: 'date.timezone = {{ region }}'
     backup: yes
