@@ -40,7 +40,7 @@
   vars: 
     packages:
       - httpd
-      - unzip
+      - tar
       - php
       - php-imap
       - php-mbstring
