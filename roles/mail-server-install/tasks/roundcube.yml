@@ -84,9 +84,9 @@
 - name: Copy roundcube folder to the document folder
   copy: 
     remote_src: True
-    src: /root/{{ roundcube }}
+    src: /root/{{ roundcube }}/
     dest: /var/www/html/
-    directory_mode: yes
+ #   directory_mode: yes
 
 #- name: Sync roundcube folder to the apache document folder
 #  synchronize:
