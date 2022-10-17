@@ -35,6 +35,7 @@
 - name: install env for roundcube
   yum: 
     name: '{{ packages }}'
+    enablerepo: remi
     state: present
   vars: 
     packages:
