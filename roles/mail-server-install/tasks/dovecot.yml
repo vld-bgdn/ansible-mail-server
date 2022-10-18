@@ -6,14 +6,6 @@
     - Enable dovecot
     - Start dovecot
 
-- name: Create directory for dovecot logs
-  file:
-    path: /var/log/dovecot
-    state: directory
-    owner: vmail
-    group: dovecot
-    mode: '0775'
-
 - name: Create group for vmail user
   group: 
     name: vmail
@@ -25,6 +17,14 @@
     uid: 1010
     group: vmail
     home: '{{ vmail_path }}'
+
+- name: Create directory for dovecot logs
+  file:
+    path: /var/log/dovecot
+    state: directory
+    owner: vmail
+    group: dovecot
+    mode: '0775'
 
 - name: Creating an empty file
   file:
