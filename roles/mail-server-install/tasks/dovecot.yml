@@ -6,6 +6,56 @@
     - Enable dovecot
     - Start dovecot
 
+- name: Create directory for dovecot logs
+  file:
+    path: /var/log/dovecot
+    state: directory
+    owner: vmail
+    group: dovecot
+    mode: '0775'
+
+- name: Creating an empty file
+  file:
+    path: /var/log/dovecot/{{ item }}
+    state: touch
+    owner: vmail
+    group: dovecot
+  loop:
+    - main.log
+    - info.log
+    - debug.log
+    - lda-errors.log
+    - lda-deliver.log
+    - lmtp.log
+
+- name: Create group for vmail user
+  group: 
+    name: vmail
+    gid: 1010
+
+- name: Add the vmail user with a specific uid and a primary group
+  user: 
+    name: vmail
+    uid: 1010
+    group: vmail
+    home: '{{ vmail_path }}'
+
+- name: Create vmail folder
+  file: 
+    path: '{{ vmail_path }}/{{ domain }}'
+    state: directory
+    owner: vmail
+    group: dovecot
+    mode: '0775'
+
+- name: Create directory for shared folders
+  file:
+    path: '{{ vmail_path }}/shared-folders'
+    state: directory
+    owner: vmail
+    group: vmail
+    mode: '0775'
+
 - name: Check dovecot conf.d folder
   stat:
     path: /etc/dovecot/conf.d
@@ -47,75 +97,11 @@
     src: templates/dovecot.conf.j2
     dest: /etc/dovecot/dovecot.conf
     mode: '0664'
-
-- name: Create group for vmail user
-  group: 
-    name: vmail
-    gid: 1010
-
-- name: Add the vmail user with a specific uid and a primary group
-  user: 
-    name: vmail
-    uid: 1010
-    group: vmail
-    home: '{{ vmail_path }}'
-
-#- name: Change vmail folder permission
-#  file: 
-#    path: '{{ vmail_path }}'
-#    owner: vmail
-#    group: vmail
-
-- name: Create vmail folder
-  file: 
-    path: '{{ vmail_path }}{{ domain }}'
-    state: directory
-    owner: vmail
-    group: dovecot
-    mode: '0775'
+  notify: Restart dovecot
 
 - name: Generate dovecot-ldap.conf
   template:
     src: templates/dovecot-ldap.conf.j2
     dest: /etc/dovecot/dovecot-ldap.conf
     mode: '0664'
-
-- name: Create directory for dovecot logs
-  file:
-    path: /var/log/dovecot
-    state: directory
-    owner: vmail
-    group: dovecot
-    mode: '0664'
-
-- name: Creating an empty file
-  file:
-    path: /var/log/dovecot/{{ item }}
-    state: touch
-    owner: vmail
-    group: dovecot
-  loop:
-    - main.log
-    - info.log
-    - debug.log
-    - lda-errors.log
-    - lda-deliver.log
-    - lmtp.log
-
-- name: Change dovecot log folder permission
-  file: 
-    path: /var/log/dovecot/
-    owner: vmail
-    group: dovecot
-    recurse: yes
-
-- name: Create directory for shared folders
-  file:
-    path: '{{ vmail_path }}/shared-folders'
-    state: directory
-    owner: vmail
-    group: vmail
-    mode: '0775'
-  notify:
-    - Restart postfix
-    - Restart dovecot
+  notify: Restart dovecot

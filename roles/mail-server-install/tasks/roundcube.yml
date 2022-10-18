@@ -8,11 +8,6 @@
   yum: 
     name: http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
     state: present
-#   disable_gpg_check: yes
-#  vars: 
-#    packages:
-#      - dnf-utils 
-#      - http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
 
 - name: Enable php module from remi repo
   copy:
@@ -45,6 +40,7 @@
     regexp: '{{ item.regexp }}'
     replace: '{{ item.replace }}'
     backup: yes
+  notify: Restart httpd
   loop:
     - regexp: ';date.timezone ='
       replace: 'date.timezone = {{ region }}'
@@ -53,30 +49,11 @@
     - regexp: 'post_max_size ='
       replace: 'post_max_size = 30M'
 
-#- name: Correct php settings
-#  lineinfile:
-#    path: /etc/httpd/conf/httpd.conf
-#    regexp: '{{item.from}}'
-#    line: '{{item.to}}'
-#        backup: yes
-#   with_items:
-#         - { from: ';date.timezone =', to: 'date.timezone = {{ region }}'}
-#         - { from: 'upload_max_filesize', to: 'ServerAdmin aksarav@devopsjunction.com'}
-#         - { from: 'post_max_size', to: 'LogLevel debug'}
-
 - name: Download roundcube
   get_url:
     url: '{{ roundcube_src }}'
     dest: /root/roundcubemail.tar.gz
     mode: '0640'
-
-#- name: Create roundcube folder
-#  file: 
-#    path: /var/www/html/roundcube
-#    state: directory
-#    owner: apache
-#    group: apache
-#    mode: 0664
 
 - name: Extract roundcube
   unarchive:
@@ -89,7 +66,6 @@
     remote_src: True
     src: /root/{{ roundcube }}/
     dest: /var/www/html/
- #   directory_mode: yes
 
 - name: Create roundcube DB folder
   file: 
@@ -97,7 +73,6 @@
     state: directory
     owner: apache
     group: apache
-    mode: '0644'
 
 - name: Initialize DB
   command:
@@ -115,11 +90,6 @@
 - name: Generate DES-key
   shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1
   register: des_key
-
-#- name: Sync roundcube folder to the apache document folder
-#  synchronize:
-#    src: /root/{{ roundcube }}
-#    dest: /var/www/html/
 
 - name: Generate roundcube config
   template: 
@@ -155,4 +125,3 @@
     regexp: '^\$config\[''username_domain''\] = \''''\;'
     replace: "$config['username_domain'] = '{{ domain }}';"
     backup: yes
-  notify: Restart httpd

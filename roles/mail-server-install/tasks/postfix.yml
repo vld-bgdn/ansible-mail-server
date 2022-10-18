@@ -65,12 +65,6 @@
     state: absent
   when: main_cf.stat.exists
 
-- name: Generate postfix main.cf
-  template: 
-    src: templates/main.cf.j2
-    dest: /etc/postfix/main.cf
-    mode: 0644
-
 - name: Create directory for postfix ldap configs
   file:
     path: /etc/postfix/ldap
@@ -78,15 +72,6 @@
     owner: root
     group: root
     mode: '0644'
-
-- name: Generate postfix virtual map configs for ldap
-  template: 
-    src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
-    mode: '0644'
-  loop:
-    - { src: 'templates/virtual_alias_maps.cf.j2', dest: '/etc/postfix/ldap/virtual_alias_maps.cf' }
-    - { src: 'templates/virtual_mailbox_maps.cf.j2', dest: '/etc/postfix/ldap/virtual_mailbox_maps.cf' }
 
 - name: Copy postfix tls_policy_maps
   copy: 
@@ -115,17 +100,12 @@
     state: absent
   when: master_cf.stat.exists
 
-- name: Copy postfix master.cf
-  copy: 
-    src: files/master.cf
-    dest: /etc/postfix/
-    mode: '0644'
-
 - name: Generate postfix sender and recipient bcc maps
   template: 
     src: '{{ item.src }}'
     dest: '{{ item.dest }}'
     mode: '0644'
+  notify: Restart postfix
   loop:
     - { src: 'templates/recipient_bcc_maps.j2', dest: '/etc/postfix/recipient_bcc_maps' }
     - { src: 'templates/sender_bcc_maps.j2', dest: '/etc/postfix/sender_bcc_maps' }
@@ -135,4 +115,27 @@
   loop:
     - recipient_bcc_maps
     - sender_bcc_maps
+
+- name: Generate postfix virtual map configs for ldap
+  template: 
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  notify: Restart postfix
+  loop:
+    - { src: 'templates/virtual_alias_maps.cf.j2', dest: '/etc/postfix/ldap/virtual_alias_maps.cf' }
+    - { src: 'templates/virtual_mailbox_maps.cf.j2', dest: '/etc/postfix/ldap/virtual_mailbox_maps.cf' }
+
+- name: Generate postfix main.cf
+  template: 
+    src: templates/main.cf.j2
+    dest: /etc/postfix/main.cf
+    mode: '0644'
+  notify: Restart postfix
+
+- name: Copy postfix master.cf
+  copy: 
+    src: files/master.cf
+    dest: /etc/postfix/
+    mode: '0644'
   notify: Restart postfix
