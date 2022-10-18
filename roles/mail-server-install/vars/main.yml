@@ -47,6 +47,7 @@ roundcube_pkg:
   - php-pear-Mail-Mime
   - php-pear-Net-IDNA2
 fw_ports:
+  - 80/tcp
   - 25/tcp
   - 110/tcp
   - 143/tcp
@@ -54,7 +55,6 @@ fw_ports:
   - 465/udp
   - 993/udp
   - 995/udp
-# Roundcube task
 roundcube_version: 1.5.3
 roundcube: roundcubemail-{{ roundcube_version }}
 roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
