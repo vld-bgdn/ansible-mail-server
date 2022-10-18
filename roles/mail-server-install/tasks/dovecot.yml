@@ -14,6 +14,18 @@
     group: dovecot
     mode: '0775'
 
+- name: Create group for vmail user
+  group: 
+    name: vmail
+    gid: 1010
+
+- name: Add the vmail user with a specific uid and a primary group
+  user: 
+    name: vmail
+    uid: 1010
+    group: vmail
+    home: '{{ vmail_path }}'
+
 - name: Creating an empty file
   file:
     path: /var/log/dovecot/{{ item }}
@@ -27,18 +39,6 @@
     - lda-errors.log
     - lda-deliver.log
     - lmtp.log
-
-- name: Create group for vmail user
-  group: 
-    name: vmail
-    gid: 1010
-
-- name: Add the vmail user with a specific uid and a primary group
-  user: 
-    name: vmail
-    uid: 1010
-    group: vmail
-    home: '{{ vmail_path }}'
 
 - name: Create vmail folder
   file: 
