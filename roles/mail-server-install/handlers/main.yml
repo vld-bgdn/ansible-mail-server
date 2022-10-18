@@ -9,6 +9,11 @@
     name: postfix
     state: restarted
 
+- name: Start postfix
+  service: 
+    name: postfix
+    state: started
+
 - name: Restart postfix
   service:
     name: postfix
@@ -18,6 +23,11 @@
   service: 
     name: dovecot
     enabled: yes
+
+- name: Start dovecot
+  service: 
+    name: dovecot
+    state: started
 
 - name: Restart dovecot
   service: 

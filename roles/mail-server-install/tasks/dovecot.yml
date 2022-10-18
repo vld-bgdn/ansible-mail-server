@@ -2,7 +2,9 @@
   yum: 
     name: '{{ dovecot_pkg }}'
     state: present
-  notify: Enable dovecot
+  notify: 
+    - Enable dovecot
+    - Start dovecot
 
 - name: Check dovecot conf.d folder
   stat:
@@ -56,21 +58,21 @@
     name: vmail
     uid: 1010
     group: vmail
-    home: /mnt/vmail/
+    home: '{{ vmail_path }}'
 
-- name: Change vmail folder permission
-  file: 
-    path: /mnt/vmail
-    owner: vmail
-    group: vmail
+#- name: Change vmail folder permission
+#  file: 
+#    path: '{{ vmail_path }}'
+#    owner: vmail
+#    group: vmail
 
 - name: Create vmail folder
   file: 
-    path: /mnt/vmail/{{ domain }}
+    path: '{{ vmail_path }}{{ domain }}'
     state: directory
     owner: vmail
     group: dovecot
-    mode: '0664'
+    mode: '0775'
 
 - name: Generate dovecot-ldap.conf
   template:
@@ -109,11 +111,11 @@
 
 - name: Create directory for shared folders
   file:
-    path: /mnt/vmail/shared-folders
+    path: '{{ vmail_path }}/shared-folders'
     state: directory
     owner: vmail
     group: vmail
-    mode: '0664'
+    mode: '0775'
   notify:
     - Restart postfix
     - Restart dovecot

@@ -24,7 +24,9 @@
   yum: 
     name: '{{ postfix_pkg }}'
     state: present
-  notify: Enable postfix
+  notify: 
+    - Enable postfix
+    - Start postfix
 
 - name: Create directory for keystore
   file:
