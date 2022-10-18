@@ -65,7 +65,7 @@
   copy: 
     remote_src: True
     src: /root/{{ roundcube }}/
-    dest: /var/www/html/
+    dest: '{{ roundcube_html_path }}/'
 
 - name: Create roundcube DB folder
   file: 
@@ -94,34 +94,42 @@
 - name: Generate roundcube config
   template: 
     src: templates/config.inc.php.j2
-    dest: /var/www/html/config/config.inc.php
+    dest: '{{ roundcube_html_path }}/config/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
 
 - name: Copy roundcube sieve plugin config
   copy: 
-    src: files/config.inc.php
-    dest: /var/www/html/plugins/managesieve/
+    src: files/sieve_config.inc.php
+    dest: '{{ roundcube_html_path }}/plugins/managesieve/config.inc.php'
+    owner: apache
+    group: apache
+    mode: '0644'
+
+- name: Copy roundcube newmail notifier plugin config
+  copy: 
+    src: files/newmail_notifier_config.inc.php
+    dest: '{{ roundcube_html_path }}/plugins/newmail_notifier/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
 
 - name: Change roundcube folder permission
   file: 
-    path: /var/www/html/
+    path: '{{ roundcube_html_path }}'
     owner: apache
     group: apache
     recurse: yes
 
 - name: Delete installer roundcube folder 
   file: 
-    path: /var/www/html/webmail/installer
+    path: '{{ roundcube_html_path }}/installer'
     state: absent
 
 - name: Correct roundcube default domain
   replace:
-    path: /var/www/html/config/defaults.inc.php
+    path: '{{ roundcube_html_path }}/config/defaults.inc.php'
     regexp: '^\$config\[''username_domain''\] = \''''\;'
     replace: "$config['username_domain'] = '{{ domain }}';"
     backup: yes
