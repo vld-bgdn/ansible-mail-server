@@ -44,7 +44,7 @@
   template: 
     src: templates/dovecot.conf.j2
     dest: /etc/dovecot/dovecot.conf
-    mode: 0555
+    mode: '0664'
 
 - name: Create group for vmail user
   group: 
@@ -70,13 +70,13 @@
     state: directory
     owner: vmail
     group: dovecot
-    mode: 0664
+    mode: '0664'
 
 - name: Generate dovecot-ldap.conf
   template:
     src: templates/dovecot-ldap.conf.j2
     dest: /etc/dovecot/dovecot-ldap.conf
-    mode: 0555
+    mode: '0664'
 
 - name: Create directory for dovecot logs
   file:
@@ -84,7 +84,7 @@
     state: directory
     owner: vmail
     group: dovecot
-    mode: 0664
+    mode: '0664'
 
 - name: Creating an empty file
   file:
@@ -113,7 +113,7 @@
     state: directory
     owner: vmail
     group: vmail
-    mode: 0664
+    mode: '0664'
   notify:
     - Restart postfix
     - Restart dovecot

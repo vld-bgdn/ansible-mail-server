@@ -97,12 +97,20 @@
     state: directory
     owner: apache
     group: apache
-    mode: 0664
+    mode: '0644'
 
 - name: Initialize DB
   command:
     cmd: "sqlite3 -init {{ roundcube_html_path }}/SQL/sqlite.initial.sql {{ roundcube_db_path }}/sqlite.db '.quit'"
     creates: '{{ roundcube_db_path }}/sqlite.db'
+
+- name: Change roundcube DB permission
+  file: 
+    path: {{ roundcube_db_path }}/sqlite.db
+    owner: apache
+    group: apache
+    recurse: yes
+    mode: '0775'
 
 - name: Generate DES-key
   shell: cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 24 | head -n 1
@@ -119,15 +127,15 @@
     dest: /var/www/html/config/config.inc.php
     owner: apache
     group: apache
-    mode: 0555
+    mode: '0644'
 
-- name: Copy roundcube siev plugin config
+- name: Copy roundcube sieve plugin config
   copy: 
     src: files/config.inc.php
     dest: /var/www/html/plugins/managesieve/
     owner: apache
     group: apache
-    mode: 0555
+    mode: '0644'
 
 - name: Change roundcube folder permission
   file: 
