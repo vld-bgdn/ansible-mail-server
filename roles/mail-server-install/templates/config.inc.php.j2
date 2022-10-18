@@ -1,7 +1,9 @@
 <?php
 $config['db_dsnw'] = 'sqlite:////{{ roundcube_db_path }}/sqlite.db?mode=0646';
 $config['default_host'] = 'localhost';
+$config['smtp_port'] = 25;
 $config['support_url'] = '';
 $config['des_key'] = '{{ des_key.stdout }}';
-$config['product_name'] = '{{ domain }} webmail';
 $config['plugins'] = ['acl', 'managesieve', 'userinfo'];
+$config['language'] = 'ru_RU';
+$config['product_name'] = '{{ domain }} webmail';
