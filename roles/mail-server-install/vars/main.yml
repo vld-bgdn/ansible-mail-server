@@ -60,5 +60,5 @@ roundcube: roundcubemail-{{ roundcube_version }}
 roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
 roundcube_db_path: /var/lib/roundcubemail
 roundcube_db_user: roundcube
-roundcube_html_path: /var/www/html/{{ roundcube }}
+roundcube_html_path: /var/www/html
 region: Europe/Moscow

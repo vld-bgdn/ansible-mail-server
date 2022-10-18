@@ -144,7 +144,7 @@
 - name: Correct roundcube default domain
   replace:
     path: /var/www/html/config/defaults.inc.php
-    regexp: '^\\$config\[''username_domain''\] ='
+    regexp: '^\$config\[''username_domain''\] = \''''\;'
     replace: "$config['username_domain'] = '{{ domain }}';"
     backup: yes
   notify: Restart httpd
