@@ -106,7 +106,7 @@
 
 - name: Change roundcube DB permission
   file: 
-    path: {{ roundcube_db_path }}/sqlite.db
+    path: '{{ roundcube_db_path }}/sqlite.db'
     owner: apache
     group: apache
     recurse: yes
