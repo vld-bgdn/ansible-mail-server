@@ -65,7 +65,7 @@
   copy: 
     remote_src: True
     src: /root/{{ roundcube }}/
-    dest: '{{ roundcube_html_path }}/'
+    dest: '{{ roundcube_web_path }}/'
 
 - name: Create roundcube DB folder
   file: 
@@ -76,7 +76,7 @@
 
 - name: Initialize DB
   command:
-    cmd: "sqlite3 -init {{ roundcube_html_path }}/SQL/sqlite.initial.sql {{ roundcube_db_path }}/sqlite.db '.quit'"
+    cmd: "sqlite3 -init {{ roundcube_web_path }}/SQL/sqlite.initial.sql {{ roundcube_db_path }}/sqlite.db '.quit'"
     creates: '{{ roundcube_db_path }}/sqlite.db'
 
 - name: Change roundcube DB permission
@@ -94,7 +94,7 @@
 - name: Generate roundcube config
   template: 
     src: templates/config.inc.php.j2
-    dest: '{{ roundcube_html_path }}/config/config.inc.php'
+    dest: '{{ roundcube_web_path }}/config/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
@@ -102,7 +102,7 @@
 - name: Copy roundcube sieve plugin config
   copy: 
     src: files/sieve_config.inc.php
-    dest: '{{ roundcube_html_path }}/plugins/managesieve/config.inc.php'
+    dest: '{{ roundcube_web_path }}/plugins/managesieve/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
@@ -110,7 +110,7 @@
 - name: Copy roundcube newmail notifier plugin config
   copy: 
     src: files/newmail_notifier_config.inc.php
-    dest: '{{ roundcube_html_path }}/plugins/newmail_notifier/config.inc.php'
+    dest: '{{ roundcube_web_path }}/plugins/newmail_notifier/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
@@ -118,26 +118,26 @@
 - name: Copy roundcube zipdownload plugin config
   copy: 
     src: files/zipdownload_config.inc.php
-    dest: '{{ roundcube_html_path }}/plugins/zipdownload/config.inc.php'
+    dest: '{{ roundcube_web_path }}/plugins/zipdownload/config.inc.php'
     owner: apache
     group: apache
     mode: '0644'
 
 - name: Change roundcube folder permission
   file: 
-    path: '{{ roundcube_html_path }}'
+    path: '{{ roundcube_web_path }}'
     owner: apache
     group: apache
     recurse: yes
 
 - name: Delete installer roundcube folder 
   file: 
-    path: '{{ roundcube_html_path }}/installer'
+    path: '{{ roundcube_web_path }}/installer'
     state: absent
 
 - name: Correct roundcube default domain
   replace:
-    path: '{{ roundcube_html_path }}/config/defaults.inc.php'
+    path: '{{ roundcube_web_path }}/config/defaults.inc.php'
     regexp: '^\$config\[''username_domain''\] = \''''\;'
     replace: "$config['username_domain'] = '{{ domain }}';"
     backup: yes
