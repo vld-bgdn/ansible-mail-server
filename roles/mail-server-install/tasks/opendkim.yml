@@ -13,7 +13,7 @@
     owner: root
     group: opendkim
 
-- name: Ensure signing key is present
+- name: Check signing key
   stat: 
     path: '{{ dkim_path }}/mail.{{ domain }}.private'
   register: dkim_key
@@ -23,15 +23,51 @@
   when: not dkim_key.stat.exists
   notify: Restart opendkim
 
+- name: Check private key
+  stat:
+    path: '{{ dkim_path }}/mail.private'
+  register: mail_private
 
-#mv mail.private mail.lab.bgdn.io.private
-#mv mail.txt mail.lab.bgdn.io.txt
+- name: Renaming. Copy private key
+  copy: 
+    remote_src: True
+    src: '{{ dkim_path }}/mail.private'
+    dest: '{{ dkim_path }}/mail.{{ domain }}.private'
+  when: mail_private.stat.exists
 
-#vi keytable
-#mail._domainkey.{{ domain }} {{ domain }}:mail:/etc/postfix/dkim/mail.{{ domain }}.private
+- name: Renaming. Delete private key
+  file: 
+    path: '{{ dkim_path }}/mail.private'
+    state: absent
+  when: mail_private.stat.exists
 
-#vi signingtable
-#*@{{ domain }} mail._domainkey.{{ domain }}
+- name: Check public key
+  stat:
+    path: '{{ dkim_path }}/mail.txt'
+  register: mail_public
+
+- name: Renaming. Copy public key
+  copy: 
+    remote_src: True
+    src: '{{ dkim_path }}/mail.txt'
+    dest: '{{ dkim_path }}/mail.{{ domain }}.txt'
+  when: mail_public.stat.exists
+
+- name: Renaming. Delete public key
+  file: 
+    path: '{{ dkim_path }}/mail.txt'
+    state: absent
+  when: mail_public.stat.exists
+
+- name: Create keytable
+  copy:
+    dest: '{{ dkim_path }}/keytable'
+    content: 'mail._domainkey.{{ domain }} {{ domain }}:mail:/etc/postfix/dkim/mail.{{ domain }}.private'
+
+- name: Create signingtable
+  copy:
+    dest: '{{ dkim_path }}/signingtable'
+    content: '*@{{ domain }} mail._domainkey.{{ domain }}'
 
 - name: Change opendkim keys permission
   file: 
@@ -40,9 +76,6 @@
     group: opendkim
     recurse: yes
     mode: '0640'
-
-#chown root:opendkim *
-#chmod u=rw,g=r,o= *
 
 - name: Generate opendkin config
   template: 
