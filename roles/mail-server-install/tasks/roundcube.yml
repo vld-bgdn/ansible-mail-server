@@ -115,6 +115,14 @@
     group: apache
     mode: '0644'
 
+- name: Copy roundcube zipdownload plugin config
+  copy: 
+    src: files/zipdownload_config.inc.php
+    dest: '{{ roundcube_html_path }}/plugins/zipdownload/config.inc.php'
+    owner: apache
+    group: apache
+    mode: '0644'
+
 - name: Change roundcube folder permission
   file: 
     path: '{{ roundcube_html_path }}'
