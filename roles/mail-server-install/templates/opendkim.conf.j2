@@ -1,0 +1,16 @@
+AutoRestart Yes
+AutoRestartRate 10/1h
+PidFile /var/run/opendkim/opendkim.pid
+Mode sv
+Syslog yes
+SyslogSuccess yes
+LogWhy yes
+UserID opendkim:opendkim
+Socket inet:8891@localhost
+Umask 022
+Canonicalization relaxed/relaxed
+Selector default
+MinimumKeyBits 1024
+KeyFile /etc/postfix/dkim/mail.{{ domain }}.private
+KeyTable /etc/postfix/dkim/keytable
+SigningTable refile:/etc/postfix/dkim/signingtable

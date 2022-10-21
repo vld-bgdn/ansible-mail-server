@@ -1,0 +1,54 @@
+
+- name: Install opendkim packages
+  yum: 
+    name: '{{ opendkim_pkg }}'
+    enablerepo: crb
+    state: present
+  notify: Enable opendkim
+
+- name: Create opendkim folder
+  file: 
+    path: /etc/postfix/dkim
+    state: directory
+    owner: root
+    group: opendkim
+
+- name: Ensure signing key is present
+  stat: 
+    path: '{{ dkim_path }}/mail.{{ domain }}.private'
+  register: dkim_key
+
+- name: Generate signing key
+  command: opendkim-genkey -D {{ dkim_path }}/ -d {{ domain }} -s mail
+  when: not dkim_key.stat.exists
+  notify: Rrestart opendkim
+
+
+#mv mail.private mail.lab.bgdn.io.private
+#mv mail.txt mail.lab.bgdn.io.txt
+
+#vi keytable
+#mail._domainkey.{{ domain }} {{ domain }}:mail:/etc/postfix/dkim/mail.{{ domain }}.private
+
+#vi signingtable
+#*@{{ domain }} mail._domainkey.{{ domain }}
+
+- name: Change opendkim keys permission
+  file: 
+    path: '{{ dkim_path }}'
+    owner: root
+    group: opendkim
+    recurse: yes
+    mode: '0640'
+
+#chown root:opendkim *
+#chmod u=rw,g=r,o= *
+
+- name: Generate opendkin config
+  template: 
+    src: templates/opendkim.conf.j2
+    dest: /etc/opendkim.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart opendkim

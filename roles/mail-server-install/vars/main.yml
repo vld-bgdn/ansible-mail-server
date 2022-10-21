@@ -46,6 +46,9 @@ roundcube_pkg:
   - php-pear-Net-Sieve
   - php-pear-Mail-Mime
   - php-pear-Net-IDNA2
+opendkim_pkg:
+  - opendkim
+  - opendkim-tools
 fw_ports:
   - 80/tcp
   - 25/tcp
@@ -62,3 +65,4 @@ roundcube_db_path: /var/lib/roundcubemail
 roundcube_db_user: roundcube
 roundcube_web_path: /var/www/html
 region: Europe/Moscow
+dkim_path: /etc/postfix/dkim

@@ -43,3 +43,13 @@
   service: 
     name: httpd
     state: restarted
+
+- name: Enable opendkim
+  service:
+    name: opendkim
+    enabled: yes
+
+- name: Restart opendkim
+  service: 
+    name: opendkim
+    state: restarted
