@@ -21,7 +21,7 @@
 - name: Generate signing key
   command: opendkim-genkey -D {{ dkim_path }}/ -d {{ domain }} -s mail
   when: not dkim_key.stat.exists
-  notify: Rrestart opendkim
+  notify: Restart opendkim
 
 
 #mv mail.private mail.lab.bgdn.io.private
