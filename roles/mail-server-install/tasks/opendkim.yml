@@ -72,7 +72,7 @@
 
 - name: Change opendkim keys permission
   file: 
-    path: '{{ dkim_path }}'
+    path: '{{ dkim_path }}/'
     owner: root
     group: opendkim
     recurse: yes
