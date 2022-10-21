@@ -12,6 +12,7 @@
     state: directory
     owner: root
     group: opendkim
+    mode: '755'
 
 - name: Check signing key
   stat: 
