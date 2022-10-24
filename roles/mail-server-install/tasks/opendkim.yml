@@ -32,6 +32,9 @@
     remote_src: True
     src: '{{ dkim_path }}/mail.private'
     dest: '{{ dkim_path }}/mail.{{ domain }}.private'
+    owner: opendkim
+    group: opendkim
+    mode: '0640'
   notify: Restart opendkim
   when: mail_private.stat.exists
 
@@ -64,12 +67,18 @@
   copy:
     dest: '{{ dkim_path }}/keytable'
     content: 'mail._domainkey.{{ domain }} {{ domain }}:mail:/etc/postfix/dkim/mail.{{ domain }}.private'
+    owner: opendkim
+    group: opendkim
+    mode: '0640'
   notify: Restart opendkim
 
 - name: Create signingtable
   copy:
     dest: '{{ dkim_path }}/signingtable'
     content: '*@{{ domain }} mail._domainkey.{{ domain }}'
+    owner: opendkim
+    group: opendkim
+    mode: '0640'
   notify: Restart opendkim
 
 - name: Change opendkim keys permission
@@ -77,7 +86,7 @@
     path: '{{ dkim_path }}/'
     owner: opendkim
     group: opendkim
-    recurse: yes
+#    recurse: yes
     mode: '0755'
 
 - name: Generate opendkin config
