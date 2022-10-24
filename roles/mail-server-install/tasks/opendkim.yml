@@ -21,7 +21,6 @@
 - name: Generate signing key
   command: opendkim-genkey -D {{ dkim_path }}/ -d {{ domain }} -s mail
   when: not dkim_key.stat.exists
-  notify: Restart opendkim
 
 - name: Check private key
   stat:
@@ -33,6 +32,7 @@
     remote_src: True
     src: '{{ dkim_path }}/mail.private'
     dest: '{{ dkim_path }}/mail.{{ domain }}.private'
+  notify: Restart opendkim
   when: mail_private.stat.exists
 
 - name: Renaming. Delete private key
@@ -51,6 +51,7 @@
     remote_src: True
     src: '{{ dkim_path }}/mail.txt'
     dest: '{{ dkim_path }}/mail.{{ domain }}.txt'
+  notify: Restart opendkim
   when: mail_public.stat.exists
 
 - name: Renaming. Delete public key
@@ -63,11 +64,13 @@
   copy:
     dest: '{{ dkim_path }}/keytable'
     content: 'mail._domainkey.{{ domain }} {{ domain }}:mail:/etc/postfix/dkim/mail.{{ domain }}.private'
+  notify: Restart opendkim
 
 - name: Create signingtable
   copy:
     dest: '{{ dkim_path }}/signingtable'
     content: '*@{{ domain }} mail._domainkey.{{ domain }}'
+  notify: Restart opendkim
 
 - name: Change opendkim keys permission
   file: 
@@ -75,7 +78,7 @@
     owner: opendkim
     group: opendkim
     recurse: yes
-    mode: '0640'
+    mode: '0755'
 
 - name: Generate opendkin config
   template: 
