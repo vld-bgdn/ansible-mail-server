@@ -8,6 +8,6 @@ scope = subtree
 deref = never
 user_filter = (&(objectClass=inetOrgPerson)(|(uid=%n)(mail=%u)))
 pass_filter = (&(objectClass=inetOrgPerson)(|(uid=%n)(mail=%u)))
-user_attrs = homeDirectory=home=/mnt/vmail/%d/%u,uidNumber=unset,gidNumber=unset
+user_attrs = homeDirectory=home={{ vmail_path }}/%d/%u,uidNumber=unset,gidNumber=unset
 pass_attrs = userPassword=password
 #debug_level = -1

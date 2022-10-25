@@ -1,4 +1,3 @@
-
 - name: Install opendkim packages
   yum: 
     name: '{{ opendkim_pkg }}'
@@ -86,7 +85,6 @@
     path: '{{ dkim_path }}/'
     owner: opendkim
     group: opendkim
-#    recurse: yes
     mode: '0755'
 
 - name: Generate opendkin config

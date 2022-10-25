@@ -15,4 +15,3 @@
   when: 
     - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
     -  ansible_distribution_major_version | int >= 8
-#  when: server_type=='external'
