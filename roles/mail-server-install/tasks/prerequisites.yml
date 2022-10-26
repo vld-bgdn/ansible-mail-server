@@ -42,7 +42,25 @@
     owner: apache
     group: apache
 
-- name: Generate basis site config
+- name: Check httpd ssl.conf file
+  stat:
+    path: /etc/httpd/conf.d/ssl.conf
+  register: ssl_conf
+
+- name: Renaming. Copy httpd ssl.conf file
+  copy: 
+    remote_src: True
+    src: /etc/httpd/conf.d/ssl.conf
+    dest: /etc/httpd/conf.d/ssl.conf.bak
+  when: ssl_conf.stat.exists
+
+- name: Renaming. Delete httpd ssl.conf file
+  file: 
+    path: /etc/httpd/conf.d/ssl.conf
+    state: absent
+  when: ssl_conf.stat.exists
+
+- name: Generate basic site config
   template: 
     src: templates/site.conf
     dest: '/etc/httpd/conf.d/{{ mail_hostname }}.conf'
