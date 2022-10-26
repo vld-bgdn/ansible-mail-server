@@ -82,15 +82,10 @@
   command: certbot --apache -d {{ mail_hostname }} --non-interactive --agree-tos -m postmaster@{{ domain }}
   notify: Restart httpd
 
-#certbot --apache -d mail.lab.bgdn.io --non-interactive --agree-tos -m postmaster@lab.bgdn.io
-
 - name: Add post_hook rules for cert renewal
   lineinfile:
     path: '/etc/letsencrypt/renewal/{{ mail_hostname }}.conf'
     line: post_hook = systemctl reload postfix dovecot httpd
-
-#vi /etc/letsencrypt/renewal/mail.lab.bgdn.io.conf
-#post_hook = systemctl reload postfix dovecot httpd
 
 - name: Add certs renewal to cron
   cron:
@@ -99,5 +94,3 @@
     hour: "1"
     user: root
     job: "/usr/bin/certbot renew"
-
-#1 1 * * * root /usr/bin/certbot renew

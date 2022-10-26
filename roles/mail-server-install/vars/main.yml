@@ -62,10 +62,10 @@ fw_ports:
   - 25/tcp
   - 110/tcp
   - 143/tcp
-  - 587/udp
-  - 465/udp
-  - 993/udp
-  - 995/udp
+  - 587/tcp
+  - 465/tcp
+  - 993/tcp
+  - 995/tcp
 roundcube_version: 1.5.3
 roundcube: roundcubemail-{{ roundcube_version }}
 roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
