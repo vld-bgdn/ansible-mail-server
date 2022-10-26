@@ -53,3 +53,18 @@
   service: 
     name: opendkim
     state: restarted
+
+- name: Enable fail2ban
+  service:
+    name: fail2ban
+    enabled: yes
+
+- name: Start fail2ban
+  service:
+    name: fail2ban
+    state: started
+
+- name: Restart fail2ban
+  service: 
+    name: fail2ban
+    state: restarted

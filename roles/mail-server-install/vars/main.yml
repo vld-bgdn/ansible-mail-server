@@ -49,6 +49,9 @@ roundcube_pkg:
 opendkim_pkg:
   - opendkim
   - opendkim-tools
+fail2ban_pkg:
+  - fail2ban
+  - fail2ban-firewalld
 fw_ports:
   - 80/tcp
   - 25/tcp

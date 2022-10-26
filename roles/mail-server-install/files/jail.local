@@ -1,0 +1,31 @@
+[INCLUDES]
+before = paths-fedora.conf
+
+[DEFAULT]
+ignoreip = 127.0.0.1/8
+bantime  = 30m
+findtime  = 30m
+maxretry = 5
+backend = auto
+usedns = warn
+logencoding = auto
+enabled = false
+mode = normal
+
+[postfix-sasl]
+enabled = true
+filter  = postfix-sasl
+port    = smtp,465,submission,imap,imaps,pop3,pop3s
+logpath = /var/log/maillog
+bantime = 60m
+maxretry = 3
+findtime = 60m
+
+[dovecot]
+enabled = true
+filter  = dovecot
+port    = imap,imaps,pop3,pop3s
+logpath = /var/log/dovecot/info.log
+bantime = 60m
+maxretry = 3
+findtime = 60m
