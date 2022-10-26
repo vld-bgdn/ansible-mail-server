@@ -1,9 +1,4 @@
 ---
-- name: Reload firewall
-  service:
-    name : firewalld
-    state: reloaded
-
 - name: Enable postfix
   service: 
     name: postfix

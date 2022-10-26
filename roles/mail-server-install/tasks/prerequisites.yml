@@ -33,8 +33,12 @@
     port: '{{ item }}'
     permanent: yes
     state: enabled
-  notify: Reload firewall
   loop: '{{ fw_ports }}'
+
+- name: Reload firewall
+  service:
+    name : firewalld
+    state: reloaded
 
 - name: Create roundcube web folder
   file: 
