@@ -15,3 +15,7 @@
   when: 
     - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
     -  ansible_distribution_major_version | int >= 8
+- include_tasks: "fail2ban.yml"
+  when: 
+    - "ansible_facts['os_family'] == 'RedHat' or ansible_facts['os_family'] == 'Rocky'"
+    -  ansible_distribution_major_version | int >= 8
