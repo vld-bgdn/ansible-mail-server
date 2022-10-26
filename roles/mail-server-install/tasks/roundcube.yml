@@ -22,7 +22,6 @@
     name: '{{ roundcube_pkg }}'
     enablerepo: remi
     state: present
-  notify: Enable httpd
 
 - name: Correct php settings
   replace:
