@@ -23,6 +23,7 @@
   yum: 
     name: '{{ certbot_pkg }}'
     state: present
+  notify: Enable httpd
 
 - name: Disable selinux
   selinux: state=disabled
@@ -67,6 +68,11 @@
     owner: apache
     group: apache
     mode: '0644'
+
+- name: Start httpd
+  service: 
+    name: httpd
+    state: started
 
 - name: Generate certs via certbot
   command: certbot --apache -d {{ mail_hostname }} --non-interactive --agree-tos -m postmaster@{{ domain }}
