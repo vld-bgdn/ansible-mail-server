@@ -1,25 +1,4 @@
 ---
-- name: Add repo epel
-  yum: 
-    name: epel-release
-    state: present
-
-- name: Install sys-utils
-  yum: 
-    name: '{{ sys_pkg }}'
-    state: present
-
-- name: Open port 
-  firewalld:
-    port: '{{ item }}'
-    permanent: yes
-    state: enabled
-  notify: Reload firewall
-  loop: '{{ fw_ports }}'
-
-- name: Disable selinux
-  selinux: state=disabled
-
 - name: Install postfix
   yum: 
     name: '{{ postfix_pkg }}'

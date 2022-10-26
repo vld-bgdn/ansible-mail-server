@@ -1,14 +1,4 @@
 ---
-- name: Add remi repo key
-  rpm_key:
-    state: present
-    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2021
-
-- name: Install remi repo
-  yum: 
-    name: http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
-    state: present
-
 - name: Enable php module from remi repo
   copy:
     dest: /etc/dnf/modules.d/php.module

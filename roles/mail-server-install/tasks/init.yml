@@ -1,0 +1,75 @@
+---
+- name: Add repo epel
+  yum: 
+    name: epel-release
+    state: present
+
+- name: Add remi repo key
+  rpm_key:
+    state: present
+    key: https://rpms.remirepo.net/RPM-GPG-KEY-remi2021
+
+- name: Install remi repo
+  yum: 
+    name: http://rpms.remirepo.net/enterprise/remi-release-9.rpm 
+    state: present
+
+- name: Install sys-utils
+  yum: 
+    name: '{{ sys_pkg }}'
+    state: present
+
+- name: Install certbot packages
+  yum: 
+    name: '{{ certbot_pkg }}'
+    state: present
+
+- name: Disable selinux
+  selinux: state=disabled
+
+- name: Open port 
+  firewalld:
+    port: '{{ item }}'
+    permanent: yes
+    state: enabled
+  notify: Reload firewall
+  loop: '{{ fw_ports }}'
+
+- name: Create roundcube web folder
+  file: 
+    path: '{{ roundcube_web_path }}'
+    state: directory
+    owner: apache
+    group: apache
+
+- name: Generate basis site config
+  template: 
+    src: templates/site.conf
+    dest: '/etc/httpd/conf.d/{{ mail_hostname }}.conf'
+    owner: apache
+    group: apache
+    mode: '0644'
+
+- name: Generate certs via certbot
+  command: certbot --apache -d {{ mail_hostname }} --non-interactive --agree-tos -m postmaster@{{ domain }}
+  notify: Restart httpd
+
+#certbot --apache -d mail.lab.bgdn.io --non-interactive --agree-tos -m postmaster@lab.bgdn.io
+
+- name: Add post_hook rules for cert renewal
+  lineinfile:
+    path: '/etc/letsencrypt/renewal/{{ mail_hostname }}.conf'
+    line: post_hook = systemctl reload postfix dovecot httpd
+
+#vi /etc/letsencrypt/renewal/mail.lab.bgdn.io.conf
+#post_hook = systemctl reload postfix dovecot httpd
+
+- name: Add certs renewal to cron
+  cron:
+    name: "renew certs"
+    minute: "1"
+    hour: "1"
+    user: root
+    job: "/usr/bin/certbot renew"
+
+#1 1 * * * root /usr/bin/certbot renew

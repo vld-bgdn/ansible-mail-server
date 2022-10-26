@@ -1,7 +1,7 @@
 ---
 # vars file for mail-server-install
 domain: lab.bgdn.io
-mail_hostname: mail.lab.bgdn.io
+mail_hostname: mail.{{ domain }}
 ldap_server: 192.168.88.201
 ldap_dn_user: _mail_svc
 ldap_dn_pass: !vault |
@@ -14,7 +14,8 @@ ldap_dn_pass: !vault |
 ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
 vmail_path: /mnt/vmail
 php_version: 7.4
-cert_folder: /ssl
+#cert_folder: /ssl
+cert_folder: /etc/letsencrypt/live/{{ mail_hostname }}
 local_net: 192.168.88.0/24
 sys_pkg:
   - htop 
@@ -26,6 +27,11 @@ sys_pkg:
   - curl
   - nc
   - tar
+certbot_pkg:
+  - httpd
+  - certbot 
+  - python3-certbot-apache
+  - mod_ssl
 dovecot_pkg: 
   - dovecot
   - dovecot-pigeonhole
@@ -33,7 +39,6 @@ postfix_pkg:
   - postfix
   - postfix-ldap
 roundcube_pkg:
-  - httpd
   - sqlite
   - php
   - php-imap
@@ -54,6 +59,7 @@ fail2ban_pkg:
   - fail2ban-firewalld
 fw_ports:
   - 80/tcp
+  - 443/tcp
   - 25/tcp
   - 110/tcp
   - 143/tcp
@@ -66,6 +72,6 @@ roundcube: roundcubemail-{{ roundcube_version }}
 roundcube_src: https://github.com/roundcube/roundcubemail/releases/download/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}-complete.tar.gz
 roundcube_db_path: /var/lib/roundcubemail
 roundcube_db_user: roundcube
-roundcube_web_path: /var/www/html
+roundcube_web_path: /var/www/roundcubemail
 region: Europe/Moscow
 dkim_path: /etc/postfix/dkim
