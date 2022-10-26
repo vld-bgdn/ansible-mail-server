@@ -14,7 +14,6 @@ ldap_dn_pass: !vault |
 ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
 vmail_path: /mnt/vmail
 php_version: 7.4
-#cert_folder: /ssl
 cert_folder: /etc/letsencrypt/live/{{ mail_hostname }}
 local_net: 192.168.88.0/24
 sys_pkg:
