@@ -125,13 +125,13 @@
     mode: '0644'
   notify: Restart postfix
   loop:
-    - { src: 'files/black_client', dest: '/etc/postfix/black_client' }
-    - { src: 'files/black_client_ip', dest: '/etc/postfix/black_client_ip' }
-    - { src: 'files/block_dsl', dest: '/etc/postfix/block_dsl' }
-    - { src: 'files/white_client', dest: '/etc/postfix/white_client' }
-    - { src: 'files/white_client_ip', dest: '/etc/postfix/white_client_ip' }
-    - { src: 'files/white_helo', dest: '/etc/postfix/white_helo' }
-    - { src: 'files/mx_accesss', dest: '/etc/postfix/mx_accesss' }
+    - { src: 'files/black_client', dest: '/etc/postfix/lists/black_client' }
+    - { src: 'files/black_client_ip', dest: '/etc/postfix/lists/black_client_ip' }
+    - { src: 'files/block_dsl', dest: '/etc/postfix/lists/block_dsl' }
+    - { src: 'files/white_client', dest: '/etc/postfix/lists/white_client' }
+    - { src: 'files/white_client_ip', dest: '/etc/postfix/lists/white_client_ip' }
+    - { src: 'files/white_helo', dest: '/etc/postfix/lists/white_helo' }
+    - { src: 'files/mx_accesss', dest: '/etc/postfix/lists/mx_accesss' }
 
 - name: Generate postfix sender and recipient bcc maps
   command: postmap /etc/postfix/lists/{{ item }}
