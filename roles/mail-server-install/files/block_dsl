@@ -1,0 +1,18 @@
+### Examples
+/^dsl.*\..*\..*/i                               553 AUTO_DSL spam
+/dsl.*\..*\..*/i                                553 AUTO_DSL1 spam
+/[ax]dsl.*\..*\..*/i                            553 AUTO_XDSL spam
+/client.*\..*\..*/i                             553 AUTO_CLIENT spam
+/cable.*\..*\..*/i                              553 AUTO_CABLE spam
+/pool.*\..*\..*/i                               553 AUTO_POOL spam
+/dial.*\..*\..*/i                               553 AUTO_DIAL spam
+/ppp.*\..*\..*/i                                553 AUTO_PPP spam
+/dslam.*\..*\..*/i                              553 AUTO_DSLAM spam
+/node.*\..*\..*/i                               553 AUTO_NODE spam
+/([0-9]*-){3}[0-9]*(\..*){2,}/i                 553 SPAM_ip-add-rr-ess_networks
+/([0-9]*\.){4}(.*\.){3,}.*/i                    553 SPAM_ip-add-rr-ess_networks
+/.*\.pppool\..*/i                               553 SPAM_POOL
+/[0-9]*-[0-9]*-[0-9]*-[0-9]*-tami\.tami\.pl/i   553 SPAM_POOL
+/pool-[0-9]*-[0-9]*-[0-9]*-[0-9]*\..*/i         553 SPAM_POOL
+/.*-[0-9]*-[0-9]*-[0-9]*-[0-9]*\.gtel.net.mx/i  553 SPAM_POOL
+/dhcp.*\..*\..*/i                               553 SPAM_DHCP

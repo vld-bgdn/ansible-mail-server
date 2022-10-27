@@ -1,0 +1,5 @@
+### Examples
+## Блокировать всю почту с домена mail.ru
+# mail.ru REJECT You domain are blacklisted!
+## Блокировать конкретный ящик
+# spam@rambler.ru REJECT You e-mail are blacklisted!
