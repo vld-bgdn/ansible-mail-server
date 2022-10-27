@@ -131,7 +131,7 @@
     - { src: 'files/white_client', dest: '/etc/postfix/lists/white_client' }
     - { src: 'files/white_client_ip', dest: '/etc/postfix/lists/white_client_ip' }
     - { src: 'files/white_helo', dest: '/etc/postfix/lists/white_helo' }
-    - { src: 'files/mx_accesss', dest: '/etc/postfix/lists/mx_access' }
+    - { src: 'files/mx_access', dest: '/etc/postfix/lists/mx_access' }
 
 - name: Generate postfix sender and recipient bcc maps
   command: postmap /etc/postfix/lists/{{ item }}
