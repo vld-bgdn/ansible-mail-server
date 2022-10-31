@@ -81,12 +81,12 @@
 - name: Check mail cert
   stat:
     path: '/etc/letsencrypt/live/{{ mail_hostname }}/fullchain.pem'
-  register: fullchain
+  register: fullchain_pem
 
 - name: Generate certs via certbot
   command: certbot --apache -d {{ mail_hostname }} --non-interactive --agree-tos -m postmaster@{{ domain }}
   notify: Restart httpd
-  when: fullchain.stat.exists
+  when: not fullchain_pem.stat.exists
 
 - name: Add post_hook rules for cert renewal
   lineinfile:
