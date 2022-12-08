@@ -12,7 +12,7 @@ ldap_dn_pass: !vault |
           3832383264663031350a316630343037663666643636656161366663363565333061336134383762
           6337
 ldap_search_base: cn=users,cn=accounts,dc=lab,dc=bgdn,dc=io
-ldap_groups_search_base: cn=groups,cn=accounts,dc=ecm,dc=blogic,dc=ru
+ldap_groups_search_base: cn=groups,cn=accounts,dc=lab,dc=bgdn,dc=io
 vmail_path: /mnt/vmail
 php_version: 7.4
 cert_folder: /etc/letsencrypt/live/{{ mail_hostname }}
