@@ -6,8 +6,8 @@ dnpass = {{ ldap_dn_pass }}
 base = {{ ldap_search_base }}
 scope = subtree
 deref = never
-user_filter = (&(objectClass=inetOrgPerson)(|(uid=%n)(mail=%u)))
-pass_filter = (&(objectClass=inetOrgPerson)(|(uid=%n)(mail=%u)))
+user_filter = (&(objectClass=inetOrgPerson)(memberof=cn=mail_users,{{ ldap_groups_search_base }})(|(uid=%n)(mail=%u)))
+pass_filter = (&(objectClass=inetOrgPerson)(memberof=cn=mail_users,{{ ldap_groups_search_base }})(|(uid=%n)(mail=%u)))
 user_attrs = homeDirectory=home={{ vmail_path }}/%d/%u,uidNumber=unset,gidNumber=unset
 pass_attrs = userPassword=password
 #debug_level = -1
