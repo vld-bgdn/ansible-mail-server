@@ -5,25 +5,7 @@
     state: present
   notify: 
     - Enable postfix
-
-#- name: Create directory for keystore
-#  file:
-#    path: /ssl
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: '0644'
-
-#- name: Add server certs and keys
-#  copy:
-#    src: files/{{ item }}
-#    dest: /ssl/
-#    decrypt: yes
-#    mode: '0600'
-#  loop:
-#    - cert.pem
-#    - fullchain.pem
-#    - key.pem
+    - Start postfix
 
 - name: Check postfix main.cf file
   stat:
